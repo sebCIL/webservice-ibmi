@@ -9,34 +9,34 @@ const ParameterValueNotValid = "IWS00103E"; // Erreur - Parameter value not vali
 // Specified object XXXX not found.
 const OperationFailed = "IWS00999E"; // Erreur - Operation failed.
 
-exports.checkStatus = function(codeStatus){
+exports.checkStatus = function (codeStatus) {
   let statusRetour = {
-    status: "",
-    libelleStatus : ""
+    codeStatut: "",
+    libelleStatut: "",
   };
 
   switch (codeStatus) {
     case PermissionRefused:
-      statusRetour.codeStatus = 403;
-      statusRetour.libelleStatus = PermissionRefused;
+      statusRetour.codeStatut = 403;
+      statusRetour.libelleStatut = PermissionRefused;
       break;
     case ServerDoesNotExist:
-      statusRetour.codeStatus = 404;
-      statusRetour.libelleStatus = ServerDoesNotExist;
+      statusRetour.codeStatut = 404;
+      statusRetour.libelleStatut = ServerDoesNotExist;
       break;
     case ServiceDoesNotExist:
-      statusRetour.codeStatus = 404;
-      statusRetour.libelleStatus = ServiceDoesNotExist;
+      statusRetour.codeStatut = 404;
+      statusRetour.libelleStatut = ServiceDoesNotExist;
       break;
     case CommandSuccessfull:
-      statusRetour.codeStatus = 204;
-      statusRetour.libelleStatus = CommandSuccessfull;
+      statusRetour.codeStatut = 204;
+      statusRetour.libelleStatut = CommandSuccessfull;
       break;
     default:
-      statusRetour.codeStatus = 500;
-      statusRetour.libelleStatus = "Erreur inconnue";
+      statusRetour.codeStatut = 500;
+      statusRetour.libelleStatut = "Erreur inconnue";
       break;
   }
 
   return statusRetour;
-}
+};

@@ -1,7 +1,6 @@
 const { Connection, CommandCall } = require("itoolkit");
 const { dbstmt, dbconn } = require("idb-connector");
 const parseString = require("xml2js").parseString;
-import utils from "../../../utils/utils";
 import * as environnement from "../../../../stores/environnement.js";
 
 const FileLibrary = environnement.FILE_LIBRARY;
@@ -16,9 +15,7 @@ export async function get(req, res) {
   );
 
   const getWebServiceProperties = `/QIBM/ProdData/OS/WebServices/bin/getWebServiceProperties.sh -server '${req.params.wserver}' -service '${req.params.wservice}' | Rfile -wQ '${FileLibrary}/${FileProperties}'`;
-
   const connectioniToolkit = new Connection(environnement.CONNEXION_API);
-
   const command = new CommandCall({
     type: "qsh",
     command: getWebServiceProperties,

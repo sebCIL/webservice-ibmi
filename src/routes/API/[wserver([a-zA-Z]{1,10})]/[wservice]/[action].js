@@ -12,7 +12,7 @@ const FileLog = environnement.FILE_LOG;
  */
 export async function get(req, res) {
   console.log(
-    `Arrêt/Démarrage d'un webservice d'un webserver : : ${JSON.stringify(
+    `Arrêt/Démarrage d'un webservice d'un webserver : ${JSON.stringify(
       req.params
     )}`
   );
@@ -72,14 +72,14 @@ export async function get(req, res) {
             connectionDB2.close(); // Clean up the connection object.
 
             const retour = utils.checkStatus(resultatSql[0].ldta);
-              res.statusCode = retour.status;
-              res.end(retour.libelleStatus);
+              res.statusCode = retour.codeStatut;
+              res.end(retour.libelleStatut);
           });
         }
       });
     } catch {
       res.statusCode = 500;
-      res.end("Erreur dans la génération du fichier");
+      res.end("Erreur dans la commande");
     }
   }
 }
