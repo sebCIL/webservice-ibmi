@@ -1,12 +1,4 @@
-// const { Connection, CommandCall } = require("itoolkit");
 const { dbstmt, dbconn } = require("idb-connector");
-// const parseString = require("xml2js").parseString;
-// import utils from "../../../utils/utils";
-// import * as environnement from "../../../../stores/environnement.js";
-
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
-// const FileServers = environnement.FILE_SERVERS;
-// const FileServices = environnement.FILE_SERVICES;
 
 /**
  * Détails d'un webservice d'un webserver
@@ -15,10 +7,7 @@ export async function get(req, res) {
   console.log(
     `Détails d'un webservice d'un webserver : ${JSON.stringify(req.params)}`
   );
-
-  // Recherche des infos dans les fichers
-  // '/www/WSERVICE/webservices/services/FluxMntTrs/FluxMntTrs.pcml'
-  // Lecture des points d'entrées
+  // Lecture du fichier PCML pour avoir des informations détaillées
   const fichierPCML =
     "/www/" +
     req.params.wserver.trim() +
@@ -51,7 +40,7 @@ export async function get(req, res) {
    chemin char(150) PATH '@path'
     ) AS TABLEXML;`;
 
-  // console.log(`SQL :  ${sql}`);
+
   const connectionDB2 = new dbconn(); // Create a connection object.
   connectionDB2.conn("*LOCAL"); // Connect to the database.
 
@@ -62,7 +51,6 @@ export async function get(req, res) {
   statement.close(); // Clean up the statement object.
 
   resultatSql.forEach((elem) => {
-    // console.log(`elem : ${elem}`);
 
     // ATTENTION ne ramène rien lorsqu'il s'agit d'un PGM et non d'un SRVPGM
     // Dans ce cas, il ne faut pas fitrer par @entrypoint
@@ -76,7 +64,6 @@ export async function get(req, res) {
         '"]/data';
     }
 
-    // console.log(`cheminXmltable : ${cheminXmltable}`);
     const sqlDetail = `SELECT case when nom_parametre is not null then trim(nom_parametre) 
       when nom_parametre2 is not null then trim(nom_parametre2) 
                 else '' end as "nom_parametre" 
@@ -104,12 +91,10 @@ export async function get(req, res) {
                 "Input/Output" VARCHAR(20) PATH '@usage', 
                 defaultValue varchar(20) PATH '@restInParamDefaultValue' 
               ) AS TABLEXML;`;
-    // console.log(`sqlDetail : ${sqlDetail}`);
 
     const statement = new dbstmt(connectionDB2); // Create a statement object.
     let resultatSqlDetail = statement.execSync(sqlDetail);
 
-    // console.log(`resultatSqlDetail : ${JSON.stringify(resultatSqlDetail)}`);
     resultatFinal.wsentrypoints.push({
       entryPoint: elem.entrypoint.trim(),
       restUriPathTemplate: elem.restUriPathTemplate.trim(),
@@ -123,6 +108,5 @@ export async function get(req, res) {
   connectionDB2.disconn(); // Disconnect from the database.
   connectionDB2.close(); // Clean up the connection object.
 
-  //   res.status(200).send(resultatFinal);
   res.end(JSON.stringify(resultatFinal));
 }

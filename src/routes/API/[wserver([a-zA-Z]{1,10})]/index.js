@@ -2,21 +2,16 @@ const { Connection, CommandCall } = require("itoolkit");
 const { dbstmt, dbconn } = require("idb-connector");
 const parseString = require("xml2js").parseString;
 
-import utils from "../../utils/utils";
 import * as environnement from "../../../stores/environnement.js";
 import fs from 'fs';
 
 
-// const FileLibrary = "CCO";
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
 const FileLibrary = environnement.FILE_LIBRARY;
-// const FileServers = environnement.FILE_SERVERS;
 const FileServices = environnement.FILE_SERVICES;
 
 export async function get(req, res) {
   console.log(`Liste des webservices du serveur : ${JSON.stringify(req.params)}`);
 
-  // const listWebServicesServers = `/QIBM/ProdData/OS/WebServices/bin/listWebServicesServers.sh | Rfile -wQ '${FileLibrary}/${FileServers}'`;
   const listWebServices = `/QIBM/ProdData/OS/WebServices/bin/listWebServices.sh -server '${req.params.wserver}' | Rfile -wQ '${FileLibrary}/${FileServices}'`;
   const connectioniToolkit = new Connection(environnement.CONNEXION_API);
 
@@ -24,8 +19,6 @@ export async function get(req, res) {
     type: "qsh",
     command: listWebServices,
   });
-
-  // console.log(`listWebServices : ${listWebServices}`);
 
   connectioniToolkit.add(command);
 
@@ -38,10 +31,6 @@ export async function get(req, res) {
           if (parseError) {
             throw parseError;
           }
-          // console.log(
-          //   `Error : ${JSON.stringify(result.myscript.qsh[0].error)}`
-          // );
-
           // Liste des webservices avec la description
           const sql = `with temp as (select 
               trim(substr(ldta, 1, LOCATE('(', ldta)-1)) as "webservice"
@@ -61,7 +50,6 @@ export async function get(req, res) {
 
           /* Resultat global */
           let resultatSql = statement.execSync(sql);
-          // console.log(`Resultat sql : ${JSON.stringify(resultatSql)}`);
 
           statement.close(); // Clean up the statement object.
           connectionDB2.disconn(); // Disconnect from the database.
@@ -69,8 +57,6 @@ export async function get(req, res) {
 
           // Pour chaque ligne de résultat, on va lire sont fichier de config afin de récupérer des informations supplémentaires
           resultatSql.forEach((element) => {
-            // console.log(`fichier : 
-            //   '/www/${req.params.wserver}/webservices/services/${element.webservice}/WEB-INF/classes/${element.webservice}.config'`);
             try {
               // Lecture du fichier
               const data = fs.readFileSync(

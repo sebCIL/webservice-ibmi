@@ -1,13 +1,6 @@
 const { Connection, ProgramCall } = require("itoolkit");
-// const { dbstmt, dbconn } = require("idb-connector");
 const parseString = require("xml2js").parseString;
-// const utils = require("../utils/utils");
-import utils from "../../../utils/utils";
 import * as environnement from "../../../../stores/environnement.js";
-
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
-// const FileServers = environnement.FILE_SERVERS;
-// const FileServices = environnement.FILE_SERVICES;
 
 /**
  * Génération du fichier de configuration
@@ -20,13 +13,9 @@ export async function get(req, res) {
   );
 
   // Récupération du chemin du fichier
-  // const FileConfiguration = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01", 2);
   const FileConfiguration = environnement.CHEMIN_IFS;
-
   const getConfigurationFile = `QSH CMD('/QIBM/ProdData/OS/WebServices/bin/getConfigurationFile.sh -server ''${req.params.wserver}'' -locationDirectory ''${FileConfiguration}'' -serviceList ''${req.params.wservice}''')`;
-
   const connectioniToolkit = new Connection(environnement.CONNEXION_API);
-
   const program = new ProgramCall("CIUT0V", { lib: "CIL" });
 
   program.addParam({ value: getConfigurationFile, type: "256A" });
@@ -61,11 +50,6 @@ export async function get(req, res) {
   };
 
   connectioniToolkit.add(program);
-
-  // console.log(`getConfigurationFile :  ${getConfigurationFile}`);
-
-  connectioniToolkit.add(program);
-
   connectioniToolkit.run((error, xmlOutput) => {
     if (error) {
       res.status(500).send(JSON.stringify(error));
@@ -74,16 +58,13 @@ export async function get(req, res) {
         if (parseError) {
           res.status(500).send(JSON.stringify(parseError));
         }
-        // console.log(`resultat :  ${result.myscript.pgm[0].parm[2].data[0]._}`);
         if (
           result.myscript.pgm[0].success &&
           result.myscript.pgm[0].parm[2].data[0]._ ==
             "QCMDEXC   QSECOFR   *NOPWD    1"
         ) {
-        //   res.status(200).send("Génération du fichier : OK");
           res.end("Génération du fichier : OK");
         } else {
-        //   res.status(500).send("Erreur dans la génération du fichier");
         res.statusCode = 500;
         res.end("Erreur dans la génération du fichier");
         }

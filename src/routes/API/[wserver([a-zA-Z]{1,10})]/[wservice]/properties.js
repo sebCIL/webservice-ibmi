@@ -4,11 +4,7 @@ const parseString = require("xml2js").parseString;
 import utils from "../../../utils/utils";
 import * as environnement from "../../../../stores/environnement.js";
 
-// const FileLibrary = "CCO";
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
 const FileLibrary = environnement.FILE_LIBRARY;
-// const FileServers = environnement.FILE_SERVERS;
-// const FileServices = environnement.FILE_SERVICES;
 const FileProperties = environnement.FILE_PROPERTIES;
 
 /**
@@ -27,7 +23,6 @@ export async function get(req, res) {
     type: "qsh",
     command: getWebServiceProperties,
   });
-  // console.log("getWebServiceProperties : ", getWebServiceProperties);
 
   connectioniToolkit.add(command);
 
@@ -40,13 +35,6 @@ export async function get(req, res) {
           if (parseError) {
             throw parseError;
           }
-          // console.log(
-          //   `Error : ${JSON.stringify(result.myscript.qsh[0].error)}`
-          // );
-          // if (result.myscript.qsh[0].$.error) {
-          //   res.status(500).send(result.myscript.qsh[0]);
-          // } else {
-          // console.log("Commande getWebServiceProperties : OK");
           const sql = `select trim(ldta) as "ldta"
                         from ${FileLibrary}.${FileProperties}
                         where ldta <> ''
@@ -58,7 +46,6 @@ export async function get(req, res) {
           const statement = new dbstmt(connectionDB2); // Create a statement object.
 
           let resultatSql = statement.execSync(sql);
-          // console.log("Resultat sql : %O", resultatSql);
 
           statement.close(); // Clean up the statement object.
           connectionDB2.disconn(); // Disconnect from the database.
@@ -67,7 +54,6 @@ export async function get(req, res) {
           let resultatFinal = { wsproperties: {} };
 
           resultatSql.forEach((element) => {
-            // console.log("element : ", element.ldta.substring(0, 20).trim());
             switch (element.ldta.substring(0, 20).trim()) {
               case "Name:":
                 resultatFinal.wsproperties.name = element.ldta
@@ -115,13 +101,11 @@ export async function get(req, res) {
             }
           });
 
-        //   res.status(200).send(resultatFinal);
         res.end(JSON.stringify(resultatFinal));
         });
       }
     });
   } catch {
-    // res.status(500).send(JSON.stringify(result));
     res.statusCode = 500;
     res.end(JSON.stringify(result));
   }

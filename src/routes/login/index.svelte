@@ -33,7 +33,6 @@
     await axios
       .post("auth/login", { user, password })
       .then(function(response) {
-        // console.log("login : " + JSON.stringify(response.data.error));
         if (response.data.error) {
           error = response.data.error.errorMessage;
         } else {

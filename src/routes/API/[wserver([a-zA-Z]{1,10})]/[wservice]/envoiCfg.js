@@ -1,13 +1,8 @@
 const { Connection, CommandCall } = require("itoolkit");
 const { dbstmt, dbconn } = require("idb-connector");
 const parseString = require("xml2js").parseString;
-import utils from "../../../utils/utils";
 import fs from "fs";
 import * as environnement from "../../../../stores/environnement.js";
-
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
-// const FileServers = environnement.FILE_SERVERS;
-// const FileServices = environnement.FILE_SERVICES;
 
 /**
  * Envoi du fichier de configuration sur une autre machine
@@ -22,12 +17,8 @@ export async function post(req, res) {
   const LIBRARY_LIST = "ws.iws.gen.librarylist=";
   const PROGRAM_OBJECT = "ws.iws.gen.programobject=";
   const serverIBMIMaj = req.query.serverIBMi;
-
   const libraryList = req.body.libraryList.trim();
   const programObject = req.body.programObject.trim();
-
-  // Récupération du chemin du fichier
-  // const FileConfiguration = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01", 2);
   const FileConfiguration = environnement.CHEMIN_IFS;
 
   // Création d'un nouveau fichier avec le contenu adapté.
@@ -39,7 +30,6 @@ export async function post(req, res) {
   let erreur = false;
 
   let writer = fs.createWriteStream(fichierPropertiesNew);
-  // console.log(`writer :  ${writer}`);
   if (writer) {
     try {
       // Lecture du fichier
@@ -56,7 +46,6 @@ export async function post(req, res) {
           ) {
             writer.write(LIBRARY_LIST + libraryList + "\r");
           } else if (line.substring(0, 25) == PROGRAM_OBJECT) {
-            // console.log(`programObject : ${programObject2}`);
             const indexPgm = line.lastIndexOf('/');
             const pgm = line.substring(indexPgm);
             if (programObject != "") {
@@ -81,7 +70,6 @@ export async function post(req, res) {
         }
       });
     } catch (err) {
-      // console.log(`erreur lecture fichier :  ${err}`);
       erreur = true;
     }
     writer.end();
@@ -100,7 +88,6 @@ export async function post(req, res) {
       type: "cl",
       command: savRst,
     });
-    // console.log(`savRst : ${savRst}`);
 
     connectioniToolkit.add(command);
 
@@ -113,9 +100,7 @@ export async function post(req, res) {
             if (parseError) {
               throw parseError;
             }
-            // console.log(`
-            //   Envoi sur la machine distante :
-            //   ${JSON.stringify(result.myscript)}`);
+
           });
         }
       });
@@ -124,12 +109,9 @@ export async function post(req, res) {
       res.end("Erreur dans la génération du fichier");
     }
 
-    // console.log(`programObject : ${programObject2}`);
-
     // Commande à exécuter sur la machine distante
     let CommandInstall = `Qsh Cmd('/QIBM/ProdData/OS/WebServices/bin/installwebservice.sh ' -server '' ${req.params.wserver.trim()} ' -propertiesFile ''${fichierPropertiesNew.trim()}'' -programObject ''${programObject2}''')`;
 
-    //   res.status(200).send({ CommandInstall });
     res.end(JSON.stringify({ CommandInstall }));
   } else {
     res.statusCode = 500;

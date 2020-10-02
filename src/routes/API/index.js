@@ -2,10 +2,8 @@ const { Connection, CommandCall } = require("itoolkit");
 const { dbstmt, dbconn } = require("idb-connector");
 const parseString = require("xml2js").parseString;
 
-import utils from '../utils/utils';
 import * as environnement from "../../stores/environnement.js";
 
-// const FileLibrary = utils.citab3("CIL", "CI", "PGMPAR", "CCWS01");
 const FileLibrary = environnement.FILE_LIBRARY;
 const FileServers = environnement.FILE_SERVERS;
 
@@ -20,8 +18,6 @@ export async function get(req, res) {
     command: listWebServicesServers,
   });
 
-  // console.log(`listWebServers : ${listWebServicesServers}`);
-
   connectioniToolkit.add(command);
 
   try {
@@ -33,9 +29,6 @@ export async function get(req, res) {
           if (parseError) {
             throw parseError;
           }
-          // console.log(
-          //   `Error : ${JSON.stringify(result.myscript.qsh[0].error)}`
-          // );
 
           const sql = `select  substr(ldta, 1, LOCATE('(', ldta)-1) as "webserver"
                       , substr(ldta, LOCATE('(', ldta)+1, LOCATE(')', ldta) - LOCATE('(', ldta)-1) as "status_svr"
@@ -49,7 +42,6 @@ export async function get(req, res) {
           const statement = new dbstmt(connectionDB2); // Create a statement object.
 
           let resultatSql = statement.execSync(sql);
-          // console.log(`Resultat sql: ${JSON.stringify(resultatSql)}`);
 
           statement.close(); // Clean up the statement object.
           connectionDB2.disconn(); // Disconnect from the database.
