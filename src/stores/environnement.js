@@ -43,4 +43,4 @@ export const CONNEXION_API = {
   },
 };
 
-export const CHEMIN_IFS = "/tmp/wservice";
+export const CHEMIN_IFS = "/tmp/wservice/";
