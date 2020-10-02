@@ -183,64 +183,6 @@
         {/each}
       </div>
 
-      <div class="divider" />
-      <div class="center" style="padding-bottom: 1rem;">
-        <h4 style="color: #ff6d00">
-          Transférer le webservice sur une autre machine
-        </h4>
-        <h6 style="font-style: italic;">1ère étape : Générer le fichier</h6>
-        <div class="col s12">
-          <button
-            on:click|preventDefault={createConfigurationFile}
-            class="waves-effect waves-light btn"
-            style="margin-left: 1rem;">
-            <i class="material-icons right">insert_drive_file</i>
-            Générer
-          </button>
-        </div>
-      </div>
-      {#if generationFichier}
-        <div class="center">
-          <h6 style="font-style: italic;">
-            2ème étape : Sélectionner la machine de destination
-          </h6>
-          <div class="col s12">
-            <div class="row center">
-              {#each listeServeurs as serveur}
-                <div class="col s3">
-                  <label>
-                    <input
-                      name="serveur"
-                      type="radio"
-                      id="serveur"
-                      value={serveur.code}
-                      bind:group={codeServeur} />
-                    <span>{serveur.libelle}</span>
-                  </label>
-                </div>
-              {/each}
-            </div>
-          </div>
-        </div>
-        <div class="col s12 center" style="padding-bottom: 1rem;">
-          <button
-            on:click|preventDefault={sendConfigurationFile}
-            class="waves-effect waves-light btn {codeServeur.length > 0 ? '' : 'disabled'}"
-            style="margin-left: 1rem;">
-            <i class="material-icons right">send</i>
-            Envoyer
-          </button>
-        </div>
-      {/if}
-
-      {#if CommandInstall.length > 0}
-        <NotifyMessage>
-          <h5 style="color: #ff6d00">
-            Commande à exécuter sur la machine {codeServeur}
-          </h5>
-          {CommandInstall}
-        </NotifyMessage>
-      {/if}
     {:else}
       <NotifyMessage>Pas de détails !</NotifyMessage>
     {/if}
