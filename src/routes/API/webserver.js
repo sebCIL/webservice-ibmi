@@ -1,4 +1,5 @@
 import { log } from "debug";
+import * as environnement from "../../stores/environnement.js";
 
 const { Connection, CommandCall, ProgramCall } = require("itoolkit");
 const parseString = require("xml2js").parseString;
@@ -13,14 +14,7 @@ export async function get(req, res) {
   log(req.query);
 
   const listWebServicesServers = `/QIBM/ProdData/OS/WebServices/bin/listWebServicesServers.sh | Rfile -wQ '${FileLibrary}/${FileServers}'`;
-  const connectioniToolkit = new Connection({
-    transport: "ssh",
-    transportOptions: {
-      host: "devcil",
-      username: "QPGMR8",
-      password: "SBMALO15",
-    },
-  });
+  const connectioniToolkit = new Connection(environnement.CONNEXION_API);
 
   const command = new CommandCall({
     type: "qsh",
