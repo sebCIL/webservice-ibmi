@@ -35,8 +35,12 @@ To start a production version of your app, run `npm run build`. This will disabl
 Define the port number `export PORT=9999`.
 Run with `node __sapper__/build`
 
+### Compatibilité PM2
+Se positionner dans le répertoire puis 
+`pm2 start __sapper__/build/index.js --name "webservice"`
+
 ### Principe de fonctionnement
-L'application se base sur les scripts disponibles dans `/QIBM/ProdData/OS/WebServices/bin/`. La documentation PDF est disponible [ici](https://public.dhe.ibm.com/systems/support/i/iws/systems_i_software_iws_pdf_WebServicesServer_new.pdf).
+L'application se base sur les scripts disponibles dans `/QIBM/ProdData/OS/WebServices/bin/`. 
 
 |Command | Description|
 | ------------- |-------------| 
@@ -64,3 +68,8 @@ Ces scripts étants consommateurs de ressources, l'application va chercher quelq
 Pour déployer le webservice sur une autre machine, un fichier de configuration est généré puis ce fichier est envoyé sur la machine distante via la commande `SAVRST`.
 
 La commande d'installation est généré et doit être exécuté manuellement par l'utilisateur.
+
+## Documentations
+[iToolkit](https://nodejs-itoolkit.readthedocs.io/en/latest/index.html)
+[idb-connector](https://github.com/IBM/nodejs-idb-connector/blob/master/docs/README.md)
+[IBMi scripts webservices](https://public.dhe.ibm.com/systems/support/i/iws/systems_i_software_iws_pdf_WebServicesServer_new.pdf)
