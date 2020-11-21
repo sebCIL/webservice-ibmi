@@ -68,7 +68,7 @@
       allowEnterKey: false
     });
 
-    const url = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/setProperties`;
+    // const url = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/setProperties`;
 
     console.log("modification");
     let newProperties = {
@@ -79,7 +79,7 @@
     };
 
     axios
-      .post(url, newProperties)
+      .post(`API/${wserver}/${wservice}/setProperties`, newProperties)
       .then(function(response) {
         Swal.close();
         Swal.fire({
@@ -99,7 +99,7 @@
         console.log("server response : " + error);
         Swal.fire({
           title: "Erreur",
-          text: "Contacter le CIL!",
+          text: "Les modifications n'ont pas été prises en compte!",
           icon: "error"
         });
       });
@@ -116,14 +116,15 @@
       showConfirmButton: false
     });
 
-    const url = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/details`;
-    const url2 = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/properties`;
+    // const url = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/details`;
+    // const url2 = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${wservice}/properties`;
 
-    axios({
-      method: "get",
-      url: url,
-      mode: "cors"
-    })
+    // axios({
+    //   method: "get",
+    //   url: url,
+    //   mode: "cors"
+    // })
+    axios.get(`API/${wserver}/${wservice}/details`)
       .then(function(response) {
         detailWebservice = response.data;
 
@@ -138,16 +139,17 @@
         console.log("server response : " + error);
         Swal.fire({
           title: "Erreur",
-          text: "Contacter le CIL!",
+          text: "Impossible de récupérer les informations !",
           icon: "error"
         });
       });
 
-      axios({
-      method: "get",
-      url: url2,
-      mode: "cors"
-    })
+    // axios({
+    //   method: "get",
+    //   url: url2,
+    //   mode: "cors"
+    // })
+    axios.get(`API/${wserver}/${wservice}/properties`)
       .then(function(response) {
         propertiesWebservice = response.data;
         
@@ -162,7 +164,7 @@
         console.log("server response : " + error);
         Swal.fire({
           title: "Erreur",
-          text: "Contacter le CIL!",
+          text: "Impossible de récupérer les informations !",
           icon: "error"
         });
       });
