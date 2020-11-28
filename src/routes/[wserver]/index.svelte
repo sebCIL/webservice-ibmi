@@ -63,7 +63,7 @@
   function startStopWebService(event) {
     let title = "Démarrage";
     let text = "Démarrage en cours...";
-    let url = `${SERVER}:${PORT}${SERVER_SUITE}${wserver}/${event.detail.webservice.webservice}/`;
+    let url = `API/${wserver}/${event.detail.webservice.webservice}/`;
 
     if (event.detail.action) {
       title = "Arrêt";
