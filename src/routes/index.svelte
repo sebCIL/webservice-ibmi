@@ -54,7 +54,7 @@
   function startStopWebServer(event) {
     let title = "Démarrage";
     let text = "Démarrage en cours...";
-    let url = `${SERVER}:${PORT}${SERVER_SUITE}${event.detail.webserver.webserver.trim()}/`;
+    let url = `API/${event.detail.webserver.webserver.trim()}/`;
 
     if (event.detail.action) {
       title = "Arrêt";
