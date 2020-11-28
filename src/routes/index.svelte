@@ -23,7 +23,7 @@
   //scripts
 
   // Components
-  import Carte from "../components/wserverCarte.svelte";
+  import Carte from "../components/WserverCarte.svelte";
   import WsFilter from "../components/WsFilter.svelte";
 
   // Stores
